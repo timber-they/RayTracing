@@ -4,11 +4,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D32058AB-2F20-4A5F-94F2-8F1DF38DD68B}</ProjectGuid>
+    <ProjectGuid>{3C2189BF-4C2E-4D7D-AC6F-9C6EF7356755}</ProjectGuid>
+    <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RayTracing</RootNamespace>
-    <AssemblyName>RayTracing</AssemblyName>
+    <RootNamespace>Test</RootNamespace>
+    <AssemblyName>Test</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -35,21 +36,22 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
+    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb">
+      <HintPath>..\packages\NUnit.3.5.0\lib\net45\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Misc\Extension.cs" />
+    <Compile Include="Genereal\VectorTests.cs" />
+    <Compile Include="Observation\FrameTests.cs" />
+    <Compile Include="Observation\ObservatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types\Observation\Frame.cs" />
-    <Compile Include="Types\Observation\Matrix.cs" />
-    <Compile Include="Types\Observation\Observator.cs" />
-    <Compile Include="Types\Properties\Colour.cs" />
-    <Compile Include="Types\Vector.cs" />
-    <Compile Include="Types\Objects\Object.cs" />
-    <Compile Include="Types\Objects\Ray.cs" />
-    <Compile Include="Types\Objects\Sphere.cs" />
-    <Compile Include="Types\Properties\Surface.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RayTracing\RayTracing.csproj">
+      <Project>{d32058ab-2f20-4a5f-94f2-8f1df38dd68b}</Project>
+      <Name>RayTracing</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

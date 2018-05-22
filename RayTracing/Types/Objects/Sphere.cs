@@ -18,12 +18,12 @@ namespace RayTracing.Types.Objects
             var c = Center;
             var r = Radius;
 
-            var determant = (2 * (d * (s - c))).Square () - (s - c).Square () + r.Square ();
+            var determant = (d * (s - c)).Square () - (s - c).Square () + r.Square ();
             if (determant < 0)
                 return null;
             var t1 = -(d * (s - c)) + Math.Sqrt (determant);
             var t2 = -(d * (s - c)) - Math.Sqrt (determant);
-            var t = Math.Min (t1, t2);
+            var t  = Math.Min (t1, t2);
 
             return t > 0 ? t : (double?) null;
         }
@@ -31,15 +31,20 @@ namespace RayTracing.Types.Objects
         /// <inheritdoc />
         public Sphere (double radius, Vector center, Surface surface) : base (center, surface) => Radius = radius;
 
-        public Ray Reflect (Ray ray, double t)
+        public override Ray Reflect (Ray ray, double? tEvaluated = null)
         {
+            var t = tEvaluated ?? Intersect (ray) ?? -1;
+            if (t == -1)
+                return null;
             var y = ray.Get (t);
             var c = Center;
             var d = ray.Direction;
             var n = (y - c) / (y - c).Abs ();
-            var r = d - 2 * (n * d) * n;
+            var r = (d - 2 * (n * d) * n).Unit ();
 
-            return new Ray (y, r);
+            var colour = ray.Colour + Surface.ReflectionAmount * Surface.Colour;
+
+            return new Ray (y, r, colour);
         }
     }
 }

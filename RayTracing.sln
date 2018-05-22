@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RayTracing", "RayTracing\RayTracing.csproj", "{D32058AB-2F20-4A5F-94F2-8F1DF38DD68B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{3C2189BF-4C2E-4D7D-AC6F-9C6EF7356755}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Visualisation", "Visualisation\Visualisation.csproj", "{6C44C488-CAB8-43A9-8E5A-FD041277AD19}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{D32058AB-2F20-4A5F-94F2-8F1DF38DD68B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D32058AB-2F20-4A5F-94F2-8F1DF38DD68B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D32058AB-2F20-4A5F-94F2-8F1DF38DD68B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C2189BF-4C2E-4D7D-AC6F-9C6EF7356755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C2189BF-4C2E-4D7D-AC6F-9C6EF7356755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C2189BF-4C2E-4D7D-AC6F-9C6EF7356755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C2189BF-4C2E-4D7D-AC6F-9C6EF7356755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C44C488-CAB8-43A9-8E5A-FD041277AD19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C44C488-CAB8-43A9-8E5A-FD041277AD19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C44C488-CAB8-43A9-8E5A-FD041277AD19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C44C488-CAB8-43A9-8E5A-FD041277AD19}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
