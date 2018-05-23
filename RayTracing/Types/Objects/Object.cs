@@ -16,6 +16,6 @@ namespace RayTracing.Types.Objects
         public Surface Surface { get; }
 
         public abstract double? Intersect (Ray ray);
-        public abstract Ray Reflect (Ray ray, double? tEvaluated);
+        public abstract Ray Reflect (Ray ray, double? tEvaluated = null);
     }
 }

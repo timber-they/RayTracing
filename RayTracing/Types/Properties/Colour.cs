@@ -12,9 +12,9 @@ namespace RayTracing.Types.Properties
         /// <inheritdoc />
         public Colour (double red, double green, double blue)
         {
-            Red   = red;
-            Green = green;
-            Blue  = blue;
+            Red   = red > 255 ? 255 : red;
+            Green = green > 255 ? 255 : green;
+            Blue  = blue > 255 ? 255 : blue;
         }
 
         public static Colour operator + (Colour colour1, Colour colour2) =>

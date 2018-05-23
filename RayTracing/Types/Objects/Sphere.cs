@@ -42,9 +42,9 @@ namespace RayTracing.Types.Objects
             var n = (y - c) / (y - c).Abs ();
             var r = (d - 2 * (n * d) * n).Unit ();
 
-            var colour = ray.Colour + Surface.ReflectionAmount * Surface.Colour;
+            var colour = ray.Colour + (1 - Surface.ReflectionAmount) * Surface.Colour * ray.IntensityLeft;
 
-            return new Ray (y, r, colour);
+            return new Ray (y, r, colour, ray.IntensityLeft * Surface.ReflectionAmount);
         }
     }
 }

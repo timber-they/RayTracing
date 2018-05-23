@@ -12,19 +12,22 @@ namespace RayTracing.Types.Observation
 {
     public class Matrix
     {
-        public List <Object> Objects      { get; }
-        public List <Vector> LightSources { get; }
-        public Observator    Observator   { get; set; }
+        public List <Object> Objects    { get; }
+        public Observator    Observator { get; set; }
 
-        public Matrix (List <Object> objects, List <Vector> lightSources, Observator observator)
+        public Matrix (List <Object> objects, List <LightSource> lightSources, Observator observator)
         {
-            Objects      = objects;
-            LightSources = lightSources;
-            Observator   = observator;
+            Objects = objects;
+            Objects.AddRange (lightSources);
+            Observator = observator;
         }
 
         public Bitmap GenerateBitmap (int depth, int pixelsHorizontal, int pixelsVertical)
         {
+            if (Math.Abs (pixelsHorizontal / (double) pixelsVertical -
+                          Observator.Frame.GetWidth () / Observator.Frame.GetHeight ()) >
+                0.1)
+                throw new InvalidOperationException ("Invalid proportions - they have to match the frame proportions.");
             var initalRays = Observator.GetRays (pixelsHorizontal, pixelsVertical);
             var bmp        = new Bitmap (pixelsHorizontal, pixelsVertical);
 
@@ -38,6 +41,10 @@ namespace RayTracing.Types.Observation
 
             return bmp;
         }
+
+        public Bitmap GenerateBitmap (int depth, int pixelsHorizontal) => GenerateBitmap (
+            depth, pixelsHorizontal,
+            (int) (Observator.Frame.GetHeight () / Observator.Frame.GetWidth () * pixelsHorizontal));
 
 
         private Ray GenerateColouredRay (int currentDepth, Ray ray)
@@ -58,11 +65,18 @@ namespace RayTracing.Types.Observation
                     minDistanceObject = o;
                 }
 
-                if (minDistanceObject == null)
-                    return ray;
-
-                currentDepth = currentDepth - 1;
-                ray          = minDistanceObject.Reflect (ray, minDistance);
+                switch (minDistanceObject)
+                {
+                    case null:
+                        return ray;
+                    case LightSource lightSource:
+                        ray.Colour = lightSource.Surface.Colour;
+                        return ray;
+                    default:
+                        currentDepth = currentDepth - 1;
+                        ray          = minDistanceObject.Reflect (ray, minDistance);
+                        break;
+                }
             }
         }
     }

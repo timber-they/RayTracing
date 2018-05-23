@@ -18,19 +18,29 @@ namespace Visualisation
     {
         public MainViewModel ()
         {
+            var observatorPosition = new Vector (0, 0, 2);
+            var observator = new Observator (observatorPosition,
+                                             new Frame (observatorPosition, 1, new Vector (0, 1, 0), 2, 1));
             var matrix = new Matrix (
-                new List <Object> {new Sphere (20, new Vector (5, 40, 5), new Surface (0.5, new Colour (0xFF, 0, 0)))},
-                new List <Vector> (),
-                new Observator (new Vector (5, 0, 5), new Frame (new Vector (7.5, 5, 7.5), new Vector (2.5, 5, 2.5))));
+                new List <Object>
+                {
+                    new Sphere (2, new Vector (0, 10, 2), new Surface (0.5, new Colour (0xFF, 0, 0))),
+                    new Sphere (1, new Vector (-4, 10, 2), new Surface (0.2, new Colour (0, 0xFF, 0)))
+                },
+                new List <LightSource>
+                {
+                    new LightSource (0.1, new Vector (2.5, 3, 3), new Colour (0xFF, 0xFF, 0xFF))
+                },
+                observator);
 
-            var bmp = matrix.GenerateBitmap (2, 1000, 1000);
+            var bmp = matrix.GenerateBitmap (4, 2000);
 
 
-            using (MemoryStream memory = new MemoryStream ())
+            using (var memory = new MemoryStream ())
             {
                 bmp.Save (memory, System.Drawing.Imaging.ImageFormat.Bmp);
                 memory.Position = 0;
-                BitmapImage bitmapimage = new BitmapImage ();
+                var bitmapimage = new BitmapImage ();
                 bitmapimage.BeginInit ();
                 bitmapimage.StreamSource = memory;
                 bitmapimage.CacheOption  = BitmapCacheOption.OnLoad;

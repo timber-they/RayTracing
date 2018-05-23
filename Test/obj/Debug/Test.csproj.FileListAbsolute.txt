@@ -1,0 +1,10 @@
+D:\Documents\Schule\Präsi\RayTracing\Test\obj\Debug\Test.csprojResolveAssemblyReference.cache
+D:\Documents\Schule\Präsi\RayTracing\Test\obj\Debug\Test.csproj.CoreCompileInputs.cache
+D:\Documents\Schule\Präsi\RayTracing\Test\bin\Debug\Test.dll
+D:\Documents\Schule\Präsi\RayTracing\Test\bin\Debug\Test.pdb
+D:\Documents\Schule\Präsi\RayTracing\Test\bin\Debug\nunit.framework.dll
+D:\Documents\Schule\Präsi\RayTracing\Test\bin\Debug\RayTracing.dll
+D:\Documents\Schule\Präsi\RayTracing\Test\bin\Debug\RayTracing.pdb
+D:\Documents\Schule\Präsi\RayTracing\Test\bin\Debug\nunit.framework.xml
+D:\Documents\Schule\Präsi\RayTracing\Test\obj\Debug\Test.dll
+D:\Documents\Schule\Präsi\RayTracing\Test\obj\Debug\Test.pdb
