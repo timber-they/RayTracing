@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
@@ -12,14 +13,15 @@ namespace RayTracing.Types.Observation
 {
     public class Matrix
     {
-        public List <Object> Objects    { get; }
-        public Observator    Observator { get; set; }
+        public List <Object>      Objects      { get; }
+        public List <LightSource> LightSources { get; }
+        public Observator         Observator   { get; set; }
 
         public Matrix (List <Object> objects, List <LightSource> lightSources, Observator observator)
         {
-            Objects = objects;
-            Objects.AddRange (lightSources);
-            Observator = observator;
+            Objects      = objects;
+            LightSources = lightSources;
+            Observator   = observator;
         }
 
         public Bitmap GenerateBitmap (int depth, int pixelsHorizontal, int pixelsVertical)
@@ -56,7 +58,7 @@ namespace RayTracing.Types.Observation
 
                 var    minDistance       = double.MaxValue;
                 Object minDistanceObject = null;
-                foreach (var o in Objects)
+                foreach (var o in Objects.Concat (LightSources))
                 {
                     var distance = o.Intersect (ray);
                     if (distance == null || distance >= minDistance)
@@ -74,10 +76,50 @@ namespace RayTracing.Types.Observation
                         return ray;
                     default:
                         currentDepth = currentDepth - 1;
-                        ray          = minDistanceObject.Reflect (ray, minDistance);
+                        var point     = ray.Get (minDistance);
+                        var intensity = GetIntensity (point);
+                        ray = minDistanceObject.Reflect (ray, intensity, point);
                         break;
                 }
             }
+        }
+
+        private double GetIntensity (Vector point)
+        {
+            var intensity = 0.0;
+            foreach (var lightSource in LightSources)
+            {
+                var direction             = lightSource.GetDirection (point);
+                var distanceToLightSource = lightSource.GetDistance (point);
+
+                var ray = new Ray (point, direction);
+
+                foreach (var o in Objects)
+                {
+                    var distanceToObject = o.Intersections (ray);
+                    if (distanceToObject == null)
+                        continue;
+                    var pointsOnRay = (ray.Get (distanceToObject.Value.Item1),
+                                           ray.Get (distanceToObject.Value.Item2));
+                    var actualDistances = ((pointsOnRay.Item1 - point).Abs (), (pointsOnRay.Item2 - point).Abs ());
+                    if ((actualDistances.Item1 >= distanceToLightSource || distanceToObject.Value.Item1 <= 0.1) &&
+                        (actualDistances.Item2 >= distanceToLightSource || distanceToObject.Value.Item2 <= 0.1))
+                        continue;
+                    /*Debug.WriteLine (
+                        "Skipping lightsource as distances are: " +
+                        $"{actualDistances.Item1}({distanceToObject.Value.Item1}) and " +
+                        $"{actualDistances.Item2}({distanceToObject.Value.Item2}). " +
+                        $"Distance to Lightsource is: {distanceToLightSource}");*/
+                    goto cont;
+                }
+
+                var remainingIntensity = lightSource.GetRemainingIntensity (distanceToLightSource);
+                intensity += remainingIntensity;
+
+                cont:;
+            }
+
+            return intensity > 1.0 ? 1.0 : intensity;
         }
     }
 }

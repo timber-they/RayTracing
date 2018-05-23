@@ -24,16 +24,16 @@ namespace Visualisation
             var matrix = new Matrix (
                 new List <Object>
                 {
-                    new Sphere (2, new Vector (0, 10, 2), new Surface (0.5, new Colour (0xFF, 0, 0))),
-                    new Sphere (1, new Vector (-4, 10, 2), new Surface (0.2, new Colour (0, 0xFF, 0)))
+                    new Sphere (2, new Vector (0, 10, 2), new Surface (0.2, new Colour (0x40, 0x40, 0x40))),
+                    new Sphere (1, new Vector (-4, 10, 2), new Surface (0.2, new Colour (0x40, 0x40, 0x40)))
                 },
                 new List <LightSource>
                 {
-                    new LightSource (0.1, new Vector (2.5, 3, 3), new Colour (0xFF, 0xFF, 0xFF))
+                    new LightSource (1, new Vector (5, 3, 10), new Colour (0xFF, 0xFF, 0xFF), 70)
                 },
                 observator);
 
-            var bmp = matrix.GenerateBitmap (4, 2000);
+            var bmp = matrix.GenerateBitmap (3, 2000);
 
 
             using (var memory = new MemoryStream ())
