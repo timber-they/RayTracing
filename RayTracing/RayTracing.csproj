@@ -42,7 +42,12 @@
     <Compile Include="Misc\Constants.cs" />
     <Compile Include="Misc\Extension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Types\Objects\LightSource.cs" />
+    <Compile Include="Types\Line.cs" />
+    <Compile Include="Types\Objects\Disk.cs" />
+    <Compile Include="Types\Objects\Interfaces\ILightSource.cs" />
+    <Compile Include="Types\Objects\Interfaces\IObject.cs" />
+    <Compile Include="Types\Objects\Plain.cs" />
+    <Compile Include="Types\Objects\SphericalLightSource.cs" />
     <Compile Include="Types\Observation\Frame.cs" />
     <Compile Include="Types\Observation\Matrix.cs" />
     <Compile Include="Types\Observation\Observator.cs" />

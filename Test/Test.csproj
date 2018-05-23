@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Genereal\VectorTests.cs" />
+    <Compile Include="Objects\LineTests.cs" />
     <Compile Include="Observation\FrameTests.cs" />
     <Compile Include="Observation\ObservatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

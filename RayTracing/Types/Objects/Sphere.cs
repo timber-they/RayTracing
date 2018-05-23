@@ -9,6 +9,7 @@ namespace RayTracing.Types.Objects
     public class Sphere : Object
     {
         public double Radius { get; }
+        public Vector Center { get; }
 
         /// <inheritdoc />
         public override double? Intersect (Ray ray)
@@ -38,7 +39,11 @@ namespace RayTracing.Types.Objects
         }
 
         /// <inheritdoc />
-        public Sphere (double radius, Vector center, Surface surface) : base (center, surface) => Radius = radius;
+        public Sphere (double radius, Vector center, Surface surface) : base (surface)
+        {
+            Radius = radius;
+            Center = center;
+        }
 
         public override Ray Reflect (Ray ray, double intensity, double? tEvaluated = null)
         {

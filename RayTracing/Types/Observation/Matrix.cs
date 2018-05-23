@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 
 using RayTracing.Types.Objects;
+using RayTracing.Types.Objects.Interfaces;
 
 using Object = RayTracing.Types.Objects.Object;
 
@@ -13,11 +14,12 @@ namespace RayTracing.Types.Observation
 {
     public class Matrix
     {
-        public List <Object>      Objects      { get; }
-        public List <LightSource> LightSources { get; }
+        public List <IObject>      Objects      { get; }
+        public List <ILightSource> LightSources { get; }
         public Observator         Observator   { get; set; }
 
-        public Matrix (List <Object> objects, List <LightSource> lightSources, Observator observator)
+
+        public Matrix (List <IObject> objects, List <ILightSource> lightSources, Observator observator)
         {
             Objects      = objects;
             LightSources = lightSources;
@@ -57,7 +59,7 @@ namespace RayTracing.Types.Observation
                     return ray;
 
                 var    minDistance       = double.MaxValue;
-                Object minDistanceObject = null;
+                IObject minDistanceObject = null;
                 foreach (var o in Objects.Concat (LightSources))
                 {
                     var distance = o.Intersect (ray);
@@ -71,7 +73,7 @@ namespace RayTracing.Types.Observation
                 {
                     case null:
                         return ray;
-                    case LightSource lightSource:
+                    case SphericalLightSource lightSource:
                         ray.Colour = lightSource.Surface.Colour;
                         return ray;
                     default:

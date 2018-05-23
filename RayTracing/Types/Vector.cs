@@ -84,5 +84,7 @@ namespace RayTracing.Types
 
         /// <inheritdoc />
         public override string ToString () => $"{X1} / {X2} / {X3}";
+
+        public static Vector Null () => new Vector(0, 0, 0);
     }
 }

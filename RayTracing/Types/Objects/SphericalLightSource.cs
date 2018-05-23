@@ -1,16 +1,17 @@
 ﻿using RayTracing.Misc;
+using RayTracing.Types.Objects.Interfaces;
 using RayTracing.Types.Properties;
 
 
 namespace RayTracing.Types.Objects
 {
-    public class LightSource : Sphere
+    public class SphericalLightSource : Sphere, ILightSource
     {
         /// <inheritdoc />
-        public LightSource (double radius, Vector center, Surface surface, double intensity = 1) :
+        public SphericalLightSource (double radius, Vector center, Surface surface, double intensity = 1) :
             base (radius, center, surface) => Intensity = intensity;
 
-        public LightSource (double radius, Vector center, Colour colour, double intensity = 1) :
+        public SphericalLightSource (double radius, Vector center, Colour colour, double intensity = 1) :
             base (radius, center, new Surface (0, colour)) => Intensity = intensity;
 
         /// <summary>
