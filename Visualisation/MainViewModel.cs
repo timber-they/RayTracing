@@ -25,12 +25,14 @@ namespace Visualisation
             var matrix = new Matrix (
                 new List <IObject>
                 {
-                    new Sphere (2, new Vector (0, 10, 2), new Surface (0.2, new Colour (0x40, 0x40, 0x40))),
-                    new Sphere (1, new Vector (-4, 10, 2), new Surface (0.2, new Colour (0x40, 0x40, 0x40)))
+                    new Sphere (2, new Vector (0, 10, 2), new Surface (0.8, new Colour (0x0, 0xA0, 0x8))),
+                    new Sphere (1, new Vector (-4, 10, 2), new Surface (0.8, new Colour (0xA0, 0x8, 0x0))),
+                    new Plain (new Surface (0.5, new Colour (0x42, 0x42, 0x42)), new Vector (-10, 30, 0),
+                               new Vector (10, 30, 0), new Vector (10, 0, 0), new Vector (-10, 0, 0))
                 },
                 new List <ILightSource>
                 {
-                    new SphericalLightSource (1, new Vector (5, 3, 10), new Colour (0xFF, 0xFF, 0xFF), 70)
+                    new SphericalLightSource (1, new Vector (5, 3, 10), new Colour (0xFF, 0xFF, 0xFF), 200)
                 },
                 observator);
 

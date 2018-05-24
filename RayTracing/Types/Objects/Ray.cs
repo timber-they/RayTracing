@@ -10,7 +10,7 @@ namespace RayTracing.Types.Objects
             origin, direction)
         {
             Colour    = colour ?? new Colour (0, 0, 0);
-            IntensityLeft = 1;
+            IntensityLeft = lightLeft;
         }
 
         public Colour Colour    { get; set; }

@@ -16,7 +16,7 @@ namespace RayTracing.Types.Observation
     {
         public List <IObject>      Objects      { get; }
         public List <ILightSource> LightSources { get; }
-        public Observator         Observator   { get; set; }
+        public Observator          Observator   { get; set; }
 
 
         public Matrix (List <IObject> objects, List <ILightSource> lightSources, Observator observator)
@@ -35,7 +35,7 @@ namespace RayTracing.Types.Observation
             var initalRays = Observator.GetRays (pixelsHorizontal, pixelsVertical);
             var bmp        = new Bitmap (pixelsHorizontal, pixelsVertical);
 
-            for (var i = 0; i < initalRays.Count; i++)
+            for (var i = 0; i < initalRays.Count; i++) // TODO: Async
             {
                 var colouredRay = GenerateColouredRay (depth, initalRays [i]);
                 var x           = i % pixelsHorizontal;
@@ -53,21 +53,24 @@ namespace RayTracing.Types.Observation
 
         private Ray GenerateColouredRay (int currentDepth, Ray ray)
         {
+            IObject lastObject = null;
             while (true)
             {
                 if (currentDepth <= 0)
                     return ray;
 
-                var    minDistance       = double.MaxValue;
+                var     minDistance       = double.MaxValue;
                 IObject minDistanceObject = null;
                 foreach (var o in Objects.Concat (LightSources))
                 {
                     var distance = o.Intersect (ray);
-                    if (distance == null || distance >= minDistance)
+                    if (distance == null || distance >= minDistance || Equals (o, lastObject))
                         continue;
                     minDistance       = distance.Value;
                     minDistanceObject = o;
                 }
+
+                lastObject = minDistanceObject;
 
                 switch (minDistanceObject)
                 {
@@ -77,10 +80,12 @@ namespace RayTracing.Types.Observation
                         ray.Colour = lightSource.Surface.Colour;
                         return ray;
                     default:
-                        currentDepth = currentDepth - 1;
+                        currentDepth--;
                         var point     = ray.Get (minDistance);
                         var intensity = GetIntensity (point);
                         ray = minDistanceObject.Reflect (ray, intensity, point);
+                        //if (currentDepth > 0 && minDistanceObject is Plain)
+                        //    Debugger.Break ();
                         break;
                 }
             }
@@ -102,7 +107,7 @@ namespace RayTracing.Types.Observation
                     if (distanceToObject == null)
                         continue;
                     var pointsOnRay = (ray.Get (distanceToObject.Value.Item1),
-                                           ray.Get (distanceToObject.Value.Item2));
+                                       ray.Get (distanceToObject.Value.Item2));
                     var actualDistances = ((pointsOnRay.Item1 - point).Abs (), (pointsOnRay.Item2 - point).Abs ());
                     if ((actualDistances.Item1 >= distanceToLightSource || distanceToObject.Value.Item1 <= 0.1) &&
                         (actualDistances.Item2 >= distanceToLightSource || distanceToObject.Value.Item2 <= 0.1))
@@ -121,7 +126,7 @@ namespace RayTracing.Types.Observation
                 cont:;
             }
 
-            return intensity > 1.0 ? 1.0 : intensity;
+            return intensity > 1.0 ? 1.0 : intensity < 0.15 ? 0.15 : intensity;
         }
     }
 }

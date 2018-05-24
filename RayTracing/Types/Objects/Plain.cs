@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 using RayTracing.Misc;
@@ -31,8 +32,8 @@ namespace RayTracing.Types.Objects
         private void CheckOrthogonality ()
         {
             var edges = GetEdges ();
-            if (edges.Item1.Direction.VectorProduct (edges.Item3.Direction) != Vector.Null () ||
-                edges.Item2.Direction.VectorProduct (edges.Item4.Direction) != Vector.Null ())
+            if (Math.Abs (edges.Item1.Direction.ScalarProduct (edges.Item3.Direction)) > 0.00001 ||
+                Math.Abs (edges.Item2.Direction.ScalarProduct (edges.Item4.Direction)) > 0.00001)
                 throw new InvalidOperationException ("The edges have to be orthogonal.");
         }
 
@@ -48,13 +49,17 @@ namespace RayTracing.Types.Objects
                 return null;
             var dividend = (p - o) * n;
             var t        = dividend / divisor;
+            if (t < -0.0001) // TODO: Why is this neccessary?
+                return null;
             var point    = ray.Get (t);
 
-            var edges                 = GetEdges ();
-            var maxHorizontalDistance = Math.Max (edges.Item1.GetDistance (point), edges.Item2.GetDistance (point));
-            var maxVerticalDistance   = Math.Max (edges.Item3.GetDistance (point), edges.Item4.GetDistance (point));
+            var edges = GetEdges ();
+            var maxHorizontalDistance =
+                Math.Max (edges.Item1.GetDistance (point), edges.Item2.GetDistance (point));
+            var maxVerticalDistance =
+                Math.Max (edges.Item3.GetDistance (point), edges.Item4.GetDistance (point));
             var maxAllowedHorizontalDistance = (Corners.Item4 - Corners.Item1).Abs ();
-            var maxAllowedVerticalDistance = (Corners.Item2 - Corners.Item1).Abs ();
+            var maxAllowedVerticalDistance   = (Corners.Item2 - Corners.Item1).Abs ();
 
             return maxHorizontalDistance > maxAllowedHorizontalDistance ||
                    maxVerticalDistance > maxAllowedVerticalDistance
@@ -78,17 +83,30 @@ namespace RayTracing.Types.Objects
             var t = tEvaluated ?? Intersect (ray) ?? -1;
             if (t == -1)
                 return null;
-            var y = ray.Get (t);
-            return Reflect (ray, intensity, y);
+            var intersectionPoint = ray.Get (t);
+            return Reflect (ray, intensity, intersectionPoint);
         }
 
         /// <inheritdoc />
-        public override Ray Reflect (Ray ray, double intensity, Vector y) =>
-            throw new System.NotImplementedException ();
+        public override Ray Reflect (Ray ray, double intensity, Vector intersectionPoint)
+        {
+            var normal             = GetNormalVector ();
+            var currentDirection   = ray.Direction;
+            var normalPart         = normal * (normal * currentDirection);
+            var reflectedDirection = currentDirection - 2 * normalPart;
+            var colour             = GetNewColour (ray, intensity);
+            var newRay = new Ray (intersectionPoint, reflectedDirection, colour,
+                                  ray.IntensityLeft * Surface.ReflectionAmount);
+
+            return newRay;
+        }
 
         /// <inheritdoc />
-        public override (double, double)? Intersections (Ray ray) =>
-            throw new InvalidOperationException ("There aren't two intersection points with a plain.");
+        public override (double, double)? Intersections (Ray ray)
+        {
+            var intersection = Intersect (ray);
+            return intersection == null ? ((double, double)?) null : (intersection.Value, intersection.Value);
+        }
 
         /// <summary>
         /// TopLeft -> TopRight

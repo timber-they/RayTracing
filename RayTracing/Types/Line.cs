@@ -25,5 +25,8 @@ namespace RayTracing.Types
 
             return distance;
         }
+
+        /// <inheritdoc />
+        public override string ToString () => $"{Origin} + t * {Direction}";
     }
 }

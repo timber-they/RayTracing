@@ -45,13 +45,13 @@ namespace RayTracing.Types.Objects
             Center = center;
         }
 
-        public override Ray Reflect (Ray ray, double intensity, double? tEvaluated = null)
+        public override Ray Reflect (Ray ray, double lightIntensity, double? tEvaluated = null)
         {
             var t = tEvaluated ?? Intersect (ray) ?? -1;
             if (t == -1)
                 return null;
             var y = ray.Get (t);
-            return Reflect (ray, intensity, y);
+            return Reflect (ray, lightIntensity, y);
         }
 
         public override Ray Reflect (Ray ray, double lightIntensity, Vector y)
@@ -61,8 +61,7 @@ namespace RayTracing.Types.Objects
             var n = (y - c) / (y - c).Abs ();
             var r = (d - 2 * (n * d) * n).Unit ();
 
-            var colour = ray.Colour +
-                         (1 - Surface.ReflectionAmount) * Surface.Colour * ray.IntensityLeft * lightIntensity;
+            var colour = GetNewColour (ray, lightIntensity);
 
             return new Ray (y, r, colour, ray.IntensityLeft * Surface.ReflectionAmount);
         }
