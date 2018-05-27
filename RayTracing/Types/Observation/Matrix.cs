@@ -35,13 +35,17 @@ namespace RayTracing.Types.Observation
             var initalRays = Observator.GetRays (pixelsHorizontal, pixelsVertical);
             var bmp        = new Bitmap (pixelsHorizontal, pixelsVertical);
 
-            for (var i = 0; i < initalRays.Count; i++) // TODO: Async
+            initalRays.Select ((ray, i) => (ray, i)).AsParallel ().ForAll (tuple =>
             {
-                var colouredRay = GenerateColouredRay (depth, initalRays [i]);
+                var ray = tuple.Item1;
+                var i   = tuple.Item2;
+
+                var colouredRay = GenerateColouredRay (depth, ray);
                 var x           = i % pixelsHorizontal;
                 var y           = i / pixelsHorizontal;
-                bmp.SetPixel (x, y, colouredRay.Colour.ToColor ());
-            }
+                lock (bmp)
+                    bmp.SetPixel (x, y, colouredRay.Colour.ToColor ());
+            });
 
             return bmp;
         }

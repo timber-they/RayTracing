@@ -43,6 +43,10 @@
     <Compile Include="Misc\Extension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Types\Line.cs" />
+    <Compile Include="Types\Objects\Cuboical\AxisCube.cs" />
+    <Compile Include="Types\Objects\Cuboical\AxisCuboid.cs" />
+    <Compile Include="Types\Objects\Cuboical\Cube.cs" />
+    <Compile Include="Types\Objects\Cuboical\Cuboid.cs" />
     <Compile Include="Types\Objects\Disk.cs" />
     <Compile Include="Types\Objects\Interfaces\ILightSource.cs" />
     <Compile Include="Types\Objects\Interfaces\IObject.cs" />

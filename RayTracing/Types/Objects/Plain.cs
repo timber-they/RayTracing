@@ -101,7 +101,11 @@ namespace RayTracing.Types.Objects
             return newRay;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Doesn't make sense here
+        /// </summary>
+        /// <param name="ray"></param>
+        /// <returns>Two times the same value</returns>
         public override (double, double)? Intersections (Ray ray)
         {
             var intersection = Intersect (ray);
