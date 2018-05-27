@@ -75,9 +75,9 @@ namespace RayTracing.Types
         {
             unchecked
             {
-                var hashCode = X1.GetHashCode ();
-                hashCode = (hashCode * 397) ^ X2.GetHashCode ();
-                hashCode = (hashCode * 397) ^ X3.GetHashCode ();
+                var hashCode = Math.Round (X1, 5, MidpointRounding.AwayFromZero).GetHashCode ();
+                hashCode = (hashCode * 397) ^ Math.Round (X2, 5, MidpointRounding.AwayFromZero).GetHashCode ();
+                hashCode = (hashCode * 397) ^ Math.Round (X3, 5, MidpointRounding.AwayFromZero).GetHashCode ();
                 return hashCode;
             }
         }
@@ -85,6 +85,6 @@ namespace RayTracing.Types
         /// <inheritdoc />
         public override string ToString () => $"{X1} / {X2} / {X3}";
 
-        public static Vector Null () => new Vector(0, 0, 0);
+        public static Vector Null () => new Vector (0, 0, 0);
     }
 }

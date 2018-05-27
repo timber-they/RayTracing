@@ -39,7 +39,7 @@ namespace RayTracing.Types.Objects
         }
 
         /// <inheritdoc />
-        public Sphere (double radius, Vector center, Surface surface) : base (surface)
+        public Sphere (Surface surface, double radius, Vector center) : base (surface)
         {
             Radius = radius;
             Center = center;

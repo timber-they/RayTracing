@@ -9,10 +9,10 @@ namespace RayTracing.Types.Objects
     {
         /// <inheritdoc />
         public SphericalLightSource (double radius, Vector center, Surface surface, double intensity = 1) :
-            base (radius, center, surface) => Intensity = intensity;
+            base (surface, radius, center) => Intensity = intensity;
 
         public SphericalLightSource (double radius, Vector center, Colour colour, double intensity = 1) :
-            base (radius, center, new Surface (0, colour)) => Intensity = intensity;
+            base (new Surface (0, colour), radius, center) => Intensity = intensity;
 
         /// <summary>
         /// Default value is 1

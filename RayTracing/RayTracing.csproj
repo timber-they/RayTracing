@@ -46,6 +46,7 @@
     <Compile Include="Types\Objects\Cuboical\AxisCube.cs" />
     <Compile Include="Types\Objects\Cuboical\AxisCuboid.cs" />
     <Compile Include="Types\Objects\Cuboical\Cube.cs" />
+    <Compile Include="Types\Objects\Cuboical\CubicalLightSource.cs" />
     <Compile Include="Types\Objects\Cuboical\Cuboid.cs" />
     <Compile Include="Types\Objects\Disk.cs" />
     <Compile Include="Types\Objects\Interfaces\ILightSource.cs" />

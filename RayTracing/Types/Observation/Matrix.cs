@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
+using RayTracing.Misc;
 using RayTracing.Types.Objects;
 using RayTracing.Types.Objects.Interfaces;
 
@@ -35,7 +36,7 @@ namespace RayTracing.Types.Observation
             var initalRays = Observator.GetRays (pixelsHorizontal, pixelsVertical);
             var bmp        = new Bitmap (pixelsHorizontal, pixelsVertical);
 
-            initalRays.Select ((ray, i) => (ray, i)).AsParallel ().ForAll (tuple =>
+            initalRays.Select ((ray, i) => (ray, i)).ToList ().AsParallel ().ForAll (tuple =>
             {
                 var ray = tuple.Item1;
                 var i   = tuple.Item2;
@@ -80,7 +81,7 @@ namespace RayTracing.Types.Observation
                 {
                     case null:
                         return ray;
-                    case SphericalLightSource lightSource:
+                    case ILightSource lightSource:
                         ray.Colour = lightSource.Surface.Colour;
                         return ray;
                     default:
@@ -113,8 +114,8 @@ namespace RayTracing.Types.Observation
                     var pointsOnRay = (ray.Get (distanceToObject.Value.Item1),
                                        ray.Get (distanceToObject.Value.Item2));
                     var actualDistances = ((pointsOnRay.Item1 - point).Abs (), (pointsOnRay.Item2 - point).Abs ());
-                    if ((actualDistances.Item1 >= distanceToLightSource || distanceToObject.Value.Item1 <= 0.1) &&
-                        (actualDistances.Item2 >= distanceToLightSource || distanceToObject.Value.Item2 <= 0.1))
+                    if ((actualDistances.Item1 >= distanceToLightSource || distanceToObject.Value.Item1 <= 0.001) &&
+                        (actualDistances.Item2 >= distanceToLightSource || distanceToObject.Value.Item2 <= 0.001))
                         continue;
                     /*Debug.WriteLine (
                         "Skipping lightsource as distances are: " +

@@ -13,7 +13,7 @@ namespace RayTracing.Types.Objects.Cuboical
         /// <summary>
         /// Top, Front, Left, Back, Right, Bottom
         /// </summary>
-        private (Plain, Plain, Plain, Plain, Plain, Plain) Plains { get; }
+        protected (Plain, Plain, Plain, Plain, Plain, Plain) Plains { get; }
 
         /// <inheritdoc />
         public Cuboid (Surface surface, (Plain, Plain, Plain, Plain, Plain, Plain) plains) : base (surface)
@@ -29,6 +29,35 @@ namespace RayTracing.Types.Objects.Cuboical
             CheckPlains ();
         }
 
+        public Cuboid (Plain top, Plain bottom) : base (top.Surface)
+        {
+            if (!Equals (top.Surface, bottom.Surface))
+                throw new Exception ("Invalid plains!");
+            Plains = (top, new Plain (top.Surface,
+                                      top.Corners.Item4,
+                                      top.Corners.Item3,
+                                      bottom.Corners.Item3,
+                                      bottom.Corners.Item4),
+                      new Plain (top.Surface,
+                                 top.Corners.Item1,
+                                 top.Corners.Item4,
+                                 bottom.Corners.Item4,
+                                 bottom.Corners.Item1),
+                      new Plain (top.Surface,
+                                 top.Corners.Item1,
+                                 top.Corners.Item2,
+                                 bottom.Corners.Item2,
+                                 bottom.Corners.Item1),
+                      new Plain (top.Surface,
+                                 top.Corners.Item3,
+                                 top.Corners.Item2,
+                                 bottom.Corners.Item2,
+                                 bottom.Corners.Item3),
+                      bottom
+                     );
+            CheckPlains ();
+        }
+
         public Cuboid (
             Surface surface,
             Vector  hlh, Vector hhh, Vector lhh, Vector llh, Vector hll, Vector hhl, Vector lhl, Vector lll)
@@ -40,7 +69,7 @@ namespace RayTracing.Types.Objects.Cuboical
                     new Plain (surface, lhh, hhh, hhl, lhl),
                     new Plain (surface, hll, hhl, lhl, lll)) {}
 
-        private void CheckPlains ()
+        protected virtual void CheckPlains ()
         {
             var (top, front, left, back, right, bottom) = GetNormals ();
             if (Math.Abs (top * front) > 0.001 ||
@@ -73,8 +102,8 @@ namespace RayTracing.Types.Objects.Cuboical
                 minIntersectionPlain    = plain;
             }
 
-            if (tEvaluated.HasValue && Math.Abs (tEvaluated.Value - minIntersectionDistance) > 0.00001)
-                throw new Exception ($"False tEvaluated! ({tEvaluated.Value} vs {minIntersectionDistance})");
+            /*if (tEvaluated.HasValue && Math.Abs (tEvaluated.Value - minIntersectionDistance) > 0.00001)
+                throw new Exception ($"False tEvaluated! ({tEvaluated.Value} vs {minIntersectionDistance})");*/
 
             return minIntersectionPlain?.Reflect (ray, intensity, minIntersectionDistance);
         }
@@ -93,6 +122,10 @@ namespace RayTracing.Types.Objects.Cuboical
                 minIntersectionPlain    = plain;
             }
 
+            /*var evaluatedY = ray.Get (minIntersectionDistance);
+            if (!Equals (y, evaluatedY))
+                throw new Exception ($"False evaluated y! ({y} vs {evaluatedY})");*/
+
             return minIntersectionPlain?.Reflect (ray, intensity, y);
         }
 
@@ -103,7 +136,7 @@ namespace RayTracing.Types.Objects.Cuboical
             foreach (var plain in Plains.ToList ())
             {
                 var distance = plain.Intersect (ray);
-                if (distance == null)
+                if (distance == null || values.Any (d => Math.Abs (d - distance.Value) < 0.000001))
                     continue;
                 values.Add (distance.Value);
             }

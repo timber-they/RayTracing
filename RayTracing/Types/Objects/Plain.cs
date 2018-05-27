@@ -51,7 +51,7 @@ namespace RayTracing.Types.Objects
             var t        = dividend / divisor;
             if (t < -0.0001) // TODO: Why is this neccessary?
                 return null;
-            var point    = ray.Get (t);
+            var point = ray.Get (t);
 
             var edges = GetEdges ();
             var maxHorizontalDistance =
@@ -135,5 +135,17 @@ namespace RayTracing.Types.Objects
                     new Line (topRight, tRbR)
                 );
         }
+
+        public Plain Move (Vector vector) => new Plain (Surface, Corners.Select (corner => corner + vector));
+
+        public double GetArea () => (Corners.Item2 - Corners.Item1).Square ();
+
+        /// <inheritdoc />
+        public override bool Equals (object obj) => obj is Plain plain && Equals (plain);
+
+        private bool Equals (Plain other) => Corners.Equals (other.Corners);
+
+        /// <inheritdoc />
+        public override int GetHashCode () => Corners.GetHashCode ();
     }
 }
