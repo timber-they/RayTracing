@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Xml.Schema;
 
 using RayTracing.Types.Objects;
 using RayTracing.Types.Objects.Interfaces;
@@ -23,7 +24,8 @@ namespace RayTracing.Types.Observation
             Observator   = observator;
         }
 
-        public Bitmap GenerateBitmap (int depth, int pixelsHorizontal, int pixelsVertical)
+        public Bitmap GenerateBitmap (
+            int depth, int pixelsHorizontal, int pixelsVertical, Action <int> updateProgressAction)
         {
             if (Math.Abs (pixelsHorizontal / (double) pixelsVertical -
                           Observator.Frame.GetWidth () / Observator.Frame.GetHeight ()) >
@@ -31,6 +33,9 @@ namespace RayTracing.Types.Observation
                 throw new InvalidOperationException ("Invalid proportions - they have to match the frame proportions.");
             var initalRays = Observator.GetRays (pixelsHorizontal, pixelsVertical);
             var bmp        = new Bitmap (pixelsHorizontal, pixelsVertical);
+
+            var progress = 0;
+            updateProgressAction (progress);
 
             initalRays.Select ((ray, i) => (ray, i)).ToList ().AsParallel ().ForAll (tuple =>
             {
@@ -41,15 +46,21 @@ namespace RayTracing.Types.Observation
                 var x           = i % pixelsHorizontal;
                 var y           = i / pixelsHorizontal;
                 lock (bmp)
+                {
                     bmp.SetPixel (x, y, colouredRay.Colour.ToColor ());
+                    progress++;
+                    if (progress % 10 == 0)
+                        updateProgressAction (progress);
+                }
             });
 
             return bmp;
         }
 
-        public Bitmap GenerateBitmap (int depth, int pixelsHorizontal) => GenerateBitmap (
-            depth, pixelsHorizontal,
-            (int) (Observator.Frame.GetHeight () / Observator.Frame.GetWidth () * pixelsHorizontal));
+        public Bitmap GenerateBitmap (int depth, int pixelsHorizontal, Action <int> updateProgressAction) =>
+            GenerateBitmap (depth, pixelsHorizontal,
+                            (int) (Observator.Frame.GetHeight () / Observator.Frame.GetWidth () * pixelsHorizontal),
+                            updateProgressAction);
 
 
         private Ray GenerateColouredRay (int currentDepth, Ray ray)

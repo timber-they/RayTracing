@@ -1,4 +1,7 @@
-﻿namespace Visualisation
+﻿using System.Windows;
+
+
+namespace Visualisation
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -9,5 +12,8 @@
         {
             InitializeComponent ();
         }
+
+        private void MainWindow_OnLoaded (object sender, RoutedEventArgs e) =>
+            ((MainViewModel) DataContext).LoadedCommand.Execute (e);
     }
 }

@@ -7,9 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525"
         WindowState="Maximized"
-        WindowStyle="None">
+        Loaded="MainWindow_OnLoaded">
     <Window.DataContext>
         <local:MainViewModel />
     </Window.DataContext>
-    <Image Source="{Binding BitmapImage}"/>
+    <StackPanel Orientation="Vertical">
+        <ProgressBar Minimum="0" Maximum="{Binding ProgressMaximum, UpdateSourceTrigger=PropertyChanged}"
+                     Value="{Binding Progress, UpdateSourceTrigger=PropertyChanged}" Height="10"/>
+        <Image Source="{Binding BitmapImage, UpdateSourceTrigger=PropertyChanged}" />
+    </StackPanel>
 </Window>

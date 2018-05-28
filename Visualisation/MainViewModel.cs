@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 using RayTracing.Types;
@@ -19,7 +22,9 @@ namespace Visualisation
 {
     public sealed class MainViewModel : INotifyPropertyChanged
     {
-        public MainViewModel ()
+        public MainViewModel () => LoadedCommand = new LoadedCommand (this);
+
+        public async void GenerateBitmap ()
         {
             var observatorPosition = new Vector (0, 0, 2);
             var observator = new Observator (observatorPosition,
@@ -34,10 +39,10 @@ namespace Visualisation
                                new Vector (-10, 30, 0),
                                new Vector (10, 30, 0), new Vector (10, 0, 0),
                                new Vector (-10, 0, 0)),
-                    new Cube (new Plain (new Surface (0.8, new Colour (0x0, 0x80, 0xFF)),
-                                         new Vector (3.3, 7.6, 3), new Vector (3.6, 7.6, 3),
-                                         new Vector (3.6, 7.3, 3),
-                                         new Vector (3.3, 7.3, 3))),
+                    //new Cube (new Plain (new Surface (0.8, new Colour (0x0, 0x80, 0xFF)),
+                    //                     new Vector (3.3, 7.6, 3), new Vector (3.6, 7.6, 3),
+                    //                     new Vector (3.6, 7.3, 3),
+                    //                     new Vector (3.3, 7.3, 3))),
                     //new Plain (new Surface (0.8, new Colour (0x0, 0x0, 0xF0)),
                     //           new Vector (3.3, 7.6, 3), new Vector (3.3, 7.3, 3), new Vector (3.3, 7.3, 3.3),
                     //           new Vector (3.3, 7.6, 3.3))
@@ -52,29 +57,36 @@ namespace Visualisation
                         new Plain (new Surface (0, new Colour (0xFF, 0xFF, 0xFF)),
                                    new Vector (4, 4, 9), new Vector (6, 4, 9),
                                    new Vector (6, 2, 9),
-                                   new Vector (4, 2, 9)), 64, 200)).ToArray ()
+                                   new Vector (4, 2, 9)), 4, 200)).ToArray ()
             );
 
-            var bmp = matrix.GenerateBitmap (5, 4000);
-
-
-            using (var memory = new MemoryStream ())
+            var width = 1000;
+            ProgressMaximum = width * width / 2;
+            await Task.Run (() =>
             {
-                bmp.Save (memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                memory.Position = 0;
-                var bitmapimage = new BitmapImage ();
-                bitmapimage.BeginInit ();
-                bitmapimage.StreamSource = memory;
-                bitmapimage.CacheOption  = BitmapCacheOption.OnLoad;
-                bitmapimage.EndInit ();
+                var bmp = matrix.GenerateBitmap (3, width, i => Progress = i);
 
-                BitmapImage = bitmapimage;
-            }
+                using (var memory = new MemoryStream ())
+                {
+                    bmp.Save (memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                    memory.Position = 0;
+                    var bitmapimage = new BitmapImage ();
+                    bitmapimage.BeginInit ();
+                    bitmapimage.StreamSource = memory;
+                    bitmapimage.CacheOption  = BitmapCacheOption.OnLoad;
+                    bitmapimage.EndInit ();
+                    bitmapimage.Freeze ();
 
-            bmp.Save (@"C:\Users\Meta Colon\Desktop\Rendered.bmp");
+                    BitmapImage = bitmapimage;
+                }
+
+                bmp.Save (@"C:\Users\Meta Colon\Desktop\Rendered.bmp");
+            });
         }
 
         private BitmapImage _bitmapImage;
+        private int         _progressMaximum;
+        private int         _progress;
 
         public BitmapImage BitmapImage
         {
@@ -87,6 +99,32 @@ namespace Visualisation
                 OnPropertyChanged ();
             }
         }
+
+        public int Progress
+        {
+            get => _progress;
+            set
+            {
+                if (Equals (value, _progress))
+                    return;
+                _progress = value;
+                OnPropertyChanged ();
+            }
+        }
+
+        public int ProgressMaximum
+        {
+            get => _progressMaximum;
+            set
+            {
+                if (Equals (value, _progressMaximum))
+                    return;
+                _progressMaximum = value;
+                OnPropertyChanged ();
+            }
+        }
+
+        public LoadedCommand LoadedCommand { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

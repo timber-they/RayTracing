@@ -12,6 +12,12 @@ namespace RayTracing.Misc
     {
         public static double Square (this double d) => d * d;
 
+        public static double Cube (this double d) => d * d * d;
+
+        public static int Square (this int i) => i * i;
+
+        public static int Cube (this int i) => i * i * i;
+
         public static List <T> ToList <T> (this Tuple <T> tuple) => new List <T> {tuple.Item1};
 
         public static List <T> ToList <T> (this Tuple <T, T> tuple) => new List <T> {tuple.Item1, tuple.Item2};
@@ -71,5 +77,15 @@ namespace RayTracing.Misc
                 action (item);
             return items;
         }
+
+        /// <summary>
+        /// Exclusive
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool Between <T> (this T value, T a, T b) where T : IComparable <T> =>
+            value.CompareTo (a) > 0 && value.CompareTo (b) < 0;
     }
 }
