@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 using RayTracing.Types;
 using RayTracing.Types.Observation;

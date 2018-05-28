@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
+
+
+// ReSharper disable UnusedMember.Global
 
 
 namespace RayTracing.Misc
@@ -46,6 +48,9 @@ namespace RayTracing.Misc
         public static (T2, T2, T2, T2, T2, T2) Select <T, T2> (this (T, T, T, T, T, T) tuple, Func <T, T2> function)
             => (function (tuple.Item1), function (tuple.Item2), function (tuple.Item3), function (tuple.Item4),
                 function (tuple.Item5), function (tuple.Item6));
+
+        public static IEnumerable <T> NotOfType <T, TYpe> (this List <T> enumerable) =>
+            enumerable.Except ((IEnumerable <T>) enumerable.OfType <TYpe> ());
 
         public static bool AllEqual <T> (this (T, T, T, T, T, T) tuple) => tuple.ToList ().AllEqual ();
 

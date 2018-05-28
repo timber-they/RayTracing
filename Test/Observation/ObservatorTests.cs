@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 using RayTracing.Types;
 using RayTracing.Types.Observation;

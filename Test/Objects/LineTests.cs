@@ -18,7 +18,7 @@ namespace Test.Objects
             var expected = Math.Sqrt (2);
             var actual = line.GetDistance (point);
 
-            Assert.AreEqual(expected, actual, 0.000001);
+            Assert.AreEqual (expected, actual, 0.000001);
         }
     }
 }

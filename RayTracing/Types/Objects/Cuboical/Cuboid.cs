@@ -6,6 +6,9 @@ using RayTracing.Misc;
 using RayTracing.Types.Properties;
 
 
+// ReSharper disable VirtualMemberCallInConstructor
+
+
 namespace RayTracing.Types.Objects.Cuboical
 {
     public class Cuboid : Object

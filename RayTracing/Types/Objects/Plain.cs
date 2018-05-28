@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Linq;
 
 using RayTracing.Misc;
 using RayTracing.Types.Properties;
@@ -81,6 +79,7 @@ namespace RayTracing.Types.Objects
         public override Ray Reflect (Ray ray, double intensity, double? tEvaluated = null)
         {
             var t = tEvaluated ?? Intersect (ray) ?? -1;
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (t == -1)
                 return null;
             var intersectionPoint = ray.Get (t);

@@ -40,6 +40,7 @@ namespace RayTracing.Types.Objects
         public override Ray Reflect (Ray ray, double intensity, double? tEvaluated = null)
         {
             var t = tEvaluated ?? Intersect (ray) ?? -1;
+            // ReSharper disable once CompareOfFloatsByEqualityOperator
             if (t == -1)
                 return null;
             var y = ray.Get (t);

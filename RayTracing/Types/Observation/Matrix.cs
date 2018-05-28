@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 
-using RayTracing.Misc;
 using RayTracing.Types.Objects;
 using RayTracing.Types.Objects.Interfaces;
-
-using Object = RayTracing.Types.Objects.Object;
 
 
 namespace RayTracing.Types.Observation
@@ -20,10 +16,10 @@ namespace RayTracing.Types.Observation
         public Observator          Observator   { get; set; }
 
 
-        public Matrix (List <IObject> objects, List <ILightSource> lightSources, Observator observator)
+        public Matrix (Observator observator, params IObject [] objects)
         {
-            Objects      = objects;
-            LightSources = lightSources;
+            LightSources = objects.OfType <ILightSource> ().ToList ();
+            Objects      = objects.ToList ().Except (LightSources).ToList ();
             Observator   = observator;
         }
 
@@ -89,8 +85,6 @@ namespace RayTracing.Types.Observation
                         var point     = ray.Get (minDistance);
                         var intensity = GetIntensity (point);
                         ray = minDistanceObject.Reflect (ray, intensity, point);
-                        //if (currentDepth > 0 && minDistanceObject is Plain)
-                        //    Debugger.Break ();
                         break;
                 }
             }
@@ -117,11 +111,6 @@ namespace RayTracing.Types.Observation
                     if ((actualDistances.Item1 >= distanceToLightSource || distanceToObject.Value.Item1 <= 0.001) &&
                         (actualDistances.Item2 >= distanceToLightSource || distanceToObject.Value.Item2 <= 0.001))
                         continue;
-                    /*Debug.WriteLine (
-                        "Skipping lightsource as distances are: " +
-                        $"{actualDistances.Item1}({distanceToObject.Value.Item1}) and " +
-                        $"{actualDistances.Item2}({distanceToObject.Value.Item2}). " +
-                        $"Distance to Lightsource is: {distanceToLightSource}");*/
                     goto cont;
                 }
 

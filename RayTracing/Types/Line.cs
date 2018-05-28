@@ -1,7 +1,4 @@
-﻿using System.Collections.Specialized;
-
-
-namespace RayTracing.Types
+﻿namespace RayTracing.Types
 {
     public class Line
     {
