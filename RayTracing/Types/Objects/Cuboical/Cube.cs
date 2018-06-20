@@ -1,6 +1,7 @@
 ﻿using System;
 
 using RayTracing.Misc;
+using RayTracing.Types.Objects.Plains;
 using RayTracing.Types.Properties;
 
 

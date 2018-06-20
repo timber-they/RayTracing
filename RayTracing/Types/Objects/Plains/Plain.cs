@@ -4,7 +4,7 @@ using RayTracing.Misc;
 using RayTracing.Types.Properties;
 
 
-namespace RayTracing.Types.Objects
+namespace RayTracing.Types.Objects.Plains
 {
     public class Plain : Object
     {
@@ -26,6 +26,8 @@ namespace RayTracing.Types.Objects
             Corners = (topLeft, topRight, bottomRight, bottomLeft);
             CheckOrthogonality ();
         }
+
+        protected Plain (Surface surface) : base (surface) {}
 
         private void CheckOrthogonality ()
         {

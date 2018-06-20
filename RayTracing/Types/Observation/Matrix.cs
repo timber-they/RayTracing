@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Xml.Schema;
+using System.Threading.Tasks;
 
 using RayTracing.Types.Objects;
 using RayTracing.Types.Objects.Interfaces;
@@ -24,6 +24,8 @@ namespace RayTracing.Types.Observation
             Observator   = observator;
         }
 
+        private Ray [] _initialRays;
+
         public Bitmap GenerateBitmap (
             int depth, int pixelsHorizontal, int pixelsVertical, Action <int> updateProgressAction)
         {
@@ -31,16 +33,16 @@ namespace RayTracing.Types.Observation
                           Observator.Frame.GetWidth () / Observator.Frame.GetHeight ()) >
                 0.1)
                 throw new InvalidOperationException ("Invalid proportions - they have to match the frame proportions.");
-            var initalRays = Observator.GetRays (pixelsHorizontal, pixelsVertical);
-            var bmp        = new Bitmap (pixelsHorizontal, pixelsVertical);
+
+            _initialRays = Observator.GetRays (pixelsHorizontal, pixelsVertical).ToArray ();
+            var bmp = new Bitmap (pixelsHorizontal, pixelsVertical);
 
             var progress = 0;
             updateProgressAction (progress);
 
-            initalRays.Select ((ray, i) => (ray, i)).ToList ().AsParallel ().ForAll (tuple =>
+            Parallel.For (0, _initialRays.Length, i =>
             {
-                var ray = tuple.Item1;
-                var i   = tuple.Item2;
+                var ray = _initialRays [i];
 
                 var colouredRay = GenerateColouredRay (depth, ray);
                 var x           = i % pixelsHorizontal;
@@ -61,7 +63,6 @@ namespace RayTracing.Types.Observation
             GenerateBitmap (depth, pixelsHorizontal,
                             (int) (Observator.Frame.GetHeight () / Observator.Frame.GetWidth () * pixelsHorizontal),
                             updateProgressAction);
-
 
         private Ray GenerateColouredRay (int currentDepth, Ray ray)
         {

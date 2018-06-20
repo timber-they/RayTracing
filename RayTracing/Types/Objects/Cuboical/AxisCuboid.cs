@@ -1,4 +1,5 @@
-﻿using RayTracing.Types.Properties;
+﻿using RayTracing.Types.Objects.Plains;
+using RayTracing.Types.Properties;
 
 
 namespace RayTracing.Types.Objects.Cuboical

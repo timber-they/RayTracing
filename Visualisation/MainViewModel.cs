@@ -12,6 +12,7 @@ using RayTracing.Types;
 using RayTracing.Types.Objects;
 using RayTracing.Types.Objects.Cuboical;
 using RayTracing.Types.Objects.Interfaces;
+using RayTracing.Types.Objects.Plains;
 using RayTracing.Types.Observation;
 using RayTracing.Types.Properties;
 

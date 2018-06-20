@@ -3,7 +3,7 @@
 using RayTracing.Types.Properties;
 
 
-namespace RayTracing.Types.Objects
+namespace RayTracing.Types.Objects.Plains
 {
     public class Disk : Object
     {

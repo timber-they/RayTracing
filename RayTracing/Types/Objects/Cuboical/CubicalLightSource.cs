@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using RayTracing.Misc;
 using RayTracing.Types.Objects.Interfaces;
+using RayTracing.Types.Objects.Plains;
 using RayTracing.Types.Properties;
 
 
